@@ -8,7 +8,7 @@ class Customer(
 
     @Id
     @GeneratedValue
-    val id: UUID? = null,
+    val id: String? = null,
 
     val name: String? = null,
 
