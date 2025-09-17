@@ -10,7 +10,7 @@ class Transaction(
 
     @Id
     @GeneratedValue
-    val id: UUID? = null,
+    val id: String? = null,
 
     @Enumerated(EnumType.STRING)
     val transactionType: TransactionType = TransactionType.INITIAL,
