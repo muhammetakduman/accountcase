@@ -22,9 +22,17 @@ class Account(
     val  customer: Customer?,
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    val trasaction: Set<Transaction>?
+    val transaction: Set<Transaction>? = HashSet()
 
 ) {
+    constructor(customer: Customer, balance: BigDecimal, creationDate: LocalDateTime) : this(
+        id = null,                 // sadece birincilde var -> hedefi netleştirir
+        customer = customer,
+        balance = balance,
+        creationDate = creationDate,
+        transaction = HashSet()    // opsiyonel ama eklemek çağrıyı iyice belirgin kılar
+    )
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -36,7 +44,7 @@ class Account(
         if (balance != other.balance) return false
         if (creationDate != other.creationDate) return false
         if (customer != other.customer) return false
-        if (trasaction != other.trasaction) return false
+        if (transaction != other.transaction) return false
 
         return true
     }
