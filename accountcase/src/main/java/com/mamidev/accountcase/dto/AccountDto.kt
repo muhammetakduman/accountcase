@@ -13,7 +13,7 @@ data class AccountDto (
 
     val  customer: AccountCustomerDto?,
 
-    val transaction: Set<TransactionDto>?
+    val transactions: Set<TransactionDto>?
 
 
 )

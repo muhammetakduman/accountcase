@@ -3,6 +3,7 @@ package com.mamidev.accountcase.dto;
 import com.mamidev.accountcase.model.Account;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -21,6 +22,6 @@ public class AccountDtoConverter {
                 from.getBalance(),
                 from.getCreationDate(),
                 customerDtoConverter.convertToAccountCustomer(from.getCustomer()),
-                from.getTrasaction().stream().map(transactionDtoConverter::convert).collect(Collectors.toSet()));
+                Objects.requireNonNull(from.getTrasaction()).stream().map(transactionDtoConverter::convert).collect(Collectors.toSet()));
     }
 }
