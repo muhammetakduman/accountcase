@@ -20,6 +20,14 @@ class Customer(
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val accounts: Set<Account> = emptySet()
 ) {
+
+    constructor(name: String, surname: String) : this(
+        id = null,
+        name = name,
+        surname = surname,
+        accounts = mutableSetOf()
+    )
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
