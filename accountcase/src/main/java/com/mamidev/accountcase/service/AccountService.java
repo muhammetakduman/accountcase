@@ -39,7 +39,7 @@ public class AccountService {
                 LocalDateTime.now());
         if(createAccountRequest.getInitialCredit().compareTo(BigDecimal.ZERO) > 0){
             Transaction transaction = transactionService.initiateMoney(account,createAccountRequest.getInitialCredit());
-            account.getTransaction().add(transaction);
+            account.getTransactions().add(transaction);
         }
         return converter.convert(accountRepository.save(account));
     }

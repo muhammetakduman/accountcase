@@ -3,7 +3,7 @@ package com.mamidev.accountcase.dto;
 import com.mamidev.accountcase.model.Account;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -17,11 +17,19 @@ public class AccountDtoConverter {
         this.transactionDtoConverter = transactionDtoConverter;
     }
 
-    public AccountDto convert(Account from){
-        return new AccountDto(from.getId(),
+    public AccountDto convert(Account from) {
+        return new AccountDto(
+                from.getId() != null ? UUID.fromString(from.getId().toString()) : null,   // <-- kritik nokta
                 from.getBalance(),
                 from.getCreationDate(),
                 customerDtoConverter.convertToAccountCustomer(from.getCustomer()),
-                Objects.requireNonNull(from.getTransaction()).stream().map(transactionDtoConverter::convert).collect(Collectors.toSet()));
+                (from.getTransactions() == null ?
+                        java.util.Set.of() :
+                        from.getTransactions()
+                                .stream()
+                                .map(transactionDtoConverter::convert)
+                                .collect(Collectors.toSet()))
+        );
     }
+
 }

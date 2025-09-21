@@ -1,13 +1,16 @@
 package com.mamidev.accountcase.model
 
 import jakarta.persistence.*
-import java.util.UUID
+import org.hibernate.annotations.UuidGenerator
+
 
 @Entity
 class Customer(
 
     @Id
     @GeneratedValue
+    @UuidGenerator
+    @Column(columnDefinition = "uuid")
     val id: String? = null,
 
     val name: String? = null,
