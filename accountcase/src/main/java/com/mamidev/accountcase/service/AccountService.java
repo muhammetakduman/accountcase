@@ -2,6 +2,7 @@ package com.mamidev.accountcase.service;
 
 
 import com.mamidev.accountcase.dto.AccountDto;
+import com.mamidev.accountcase.dto.AccountDtoConverter;
 import com.mamidev.accountcase.model.Account;
 import com.mamidev.accountcase.model.Customer;
 import com.mamidev.accountcase.model.Transaction;
@@ -19,12 +20,14 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final CustomerService customerService;
     private final TransactionService transactionService;
+    private final AccountDtoConverter converter;
 
     public AccountService(AccountRepository accountRepository, CustomerService customerService,
-                          TransactionService transactionService) {
+                          TransactionService transactionService, AccountDtoConverter converter) {
         this.accountRepository = accountRepository;
         this.customerService = customerService;
         this.transactionService = transactionService;
+        this.converter = converter;
     }
 
     public AccountDto createAccount(CreateAccountRequest createAccountRequest){
@@ -38,5 +41,6 @@ public class AccountService {
             Transaction transaction = transactionService.initiateMoney(account,createAccountRequest.getInitialCredit());
             account.getTransaction().add(transaction);
         }
+        return converter.convert(accountRepository.save(account));
     }
 }
