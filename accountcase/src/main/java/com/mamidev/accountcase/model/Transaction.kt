@@ -22,7 +22,7 @@ class Transaction(
 
     val transactionDate: LocalDateTime = LocalDateTime.now(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY ,optional = false )
     @JoinColumn(name = "account_id", nullable = false)
     val account: Account
 ) {

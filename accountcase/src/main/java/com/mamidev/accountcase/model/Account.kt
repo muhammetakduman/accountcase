@@ -20,11 +20,11 @@ class Account(
     val creationDate: LocalDateTime = LocalDateTime.now(),
 
     // ManyToOne'da Cascade.ALL genelde önerilmez (özellikle delete cascade)
-    @ManyToOne(fetch = FetchType.LAZY/*, cascade = [CascadeType.ALL] */)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL] )
     @JoinColumn(name = "customer_id", nullable = false)
     val customer: Customer?,
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER , cascade = [CascadeType.ALL])
     val transactions: Set<Transaction> = HashSet()
 
 ) {
