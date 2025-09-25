@@ -28,6 +28,10 @@ class Customer(
         accounts = mutableSetOf()
     )
 
+    constructor(id: String, name: String, surnma: String, of: MutableSet<Account>) : this() {
+
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
