@@ -12,6 +12,7 @@ import com.mamidev.accountcase.dto.CreateAccountRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Service
@@ -31,7 +32,7 @@ public class AccountService {
     }
 
     public AccountDto createAccount(CreateAccountRequest createAccountRequest){
-        Customer customer = customerService.findCustomerById(createAccountRequest.getCustomerId());
+        Customer customer = customerService.findCustomerById(UUID.fromString(createAccountRequest.getCustomerId()));
 
         Account account = new Account(
                 customer,

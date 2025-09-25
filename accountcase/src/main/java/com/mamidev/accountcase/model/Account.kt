@@ -7,36 +7,32 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-class Account(
+open class Account(
 
     @Id
     @GeneratedValue
     @UuidGenerator
-    @Column(columnDefinition = "uuid")   // PG'de gerçek uuid sütunu
-    val id: UUID? = null,
+    @Column(columnDefinition = "uuid")
+    open var id: UUID? = null,
 
-    val balance: BigDecimal? = BigDecimal.ZERO,
+    open var balance: BigDecimal? = BigDecimal.ZERO,
 
-    val creationDate: LocalDateTime = LocalDateTime.now(),
+    open var creationDate: LocalDateTime = LocalDateTime.now(),
 
-    // ManyToOne'da Cascade.ALL genelde önerilmez (özellikle delete cascade)
-    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL] )
+    @ManyToOne(fetch = FetchType.LAZY) // Cascade.ALL kaldırıldı
     @JoinColumn(name = "customer_id", nullable = false)
-    val customer: Customer?,
+    open var customer: Customer? = null,
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER , cascade = [CascadeType.ALL])
-    val transactions: Set<Transaction> = HashSet()
-
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    open var transactions: MutableSet<Transaction> = hashSetOf()
 ) {
-    constructor(customer: Customer, balance: BigDecimal, creationDate: LocalDateTime) : this(
-        id = null,
-        customer = customer,
-        balance = balance,
-        creationDate = creationDate,
-        transactions = HashSet()
-    )
+    // JPA için parametresiz kurucu (Hibernate bunu ister)
+    protected constructor(): this(null, BigDecimal.ZERO, LocalDateTime.now(), null, hashSetOf())
 
-    // Sadece id'ye göre equals/hashCode genelde daha güvenli
+    // Yardımcı kurucu (opsiyonel)
+    constructor(customer: Customer, balance: BigDecimal, creationDate: LocalDateTime)
+            : this(null, balance, creationDate, customer, hashSetOf())
+
     override fun equals(other: Any?) =
         this === other || (other is Account && id != null && id == other.id)
 

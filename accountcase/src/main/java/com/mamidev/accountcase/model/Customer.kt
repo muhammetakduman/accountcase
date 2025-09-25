@@ -2,6 +2,7 @@ package com.mamidev.accountcase.model
 
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
+import java.util.*
 
 
 @Entity
@@ -11,10 +12,9 @@ class Customer(
     @GeneratedValue
     @UuidGenerator
     @Column(columnDefinition = "uuid")
-    val id: String? = null,
+    val id: UUID? = null,        // String -> UUID
 
     val name: String? = null,
-
     val surname: String? = null,
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])

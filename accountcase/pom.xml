@@ -82,46 +82,56 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<!-- Kotlin compiler (Maven) -->
+			<!-- Kotlin compiler: all-open + no-arg (+ spring) -->
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
 				<version>${kotlin.version}</version>
 				<executions>
 					<execution>
-						<id>kotlin-compile</id>
+						<id>compile</id>
 						<phase>compile</phase>
 						<goals>
 							<goal>compile</goal>
 						</goals>
 						<configuration>
-							<jvmTarget>21</jvmTarget>
+							<jvmTarget>${java.version}</jvmTarget>
+							<javaParameters>true</javaParameters>
 							<compilerPlugins>
-								<!-- Spring + JPA uyumluluğu (final kaldırma, no-arg ctor) -->
+								<!-- Spring anotasyonlarını open yapar -->
 								<plugin>spring</plugin>
-								<plugin>jpa</plugin>
+								<!-- JPA için final kaldırma -->
+								<plugin>all-open</plugin>
+								<!-- JPA entity'lerine no-arg ctor üretir -->
 								<plugin>no-arg</plugin>
 							</compilerPlugins>
 							<pluginOptions>
+								<!-- JPA anotasyonları için all-open -->
+								<option>all-open:annotation=jakarta.persistence.Entity</option>
+								<option>all-open:annotation=jakarta.persistence.MappedSuperclass</option>
+								<option>all-open:annotation=jakarta.persistence.Embeddable</option>
+								<!-- no-arg gerekli anotasyonlar -->
 								<option>no-arg:annotation=jakarta.persistence.Entity</option>
+								<option>no-arg:annotation=jakarta.persistence.MappedSuperclass</option>
+								<option>no-arg:annotation=jakarta.persistence.Embeddable</option>
 							</pluginOptions>
 						</configuration>
 					</execution>
 
 					<execution>
-						<id>kotlin-test-compile</id>
+						<id>test-compile</id>
 						<phase>test-compile</phase>
 						<goals>
 							<goal>test-compile</goal>
 						</goals>
 						<configuration>
-							<jvmTarget>21</jvmTarget>
+							<jvmTarget>${java.version}</jvmTarget>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
-			<!-- (Opsiyonel ama temiz) Java compiler release parametresi -->
+			<!-- (opsiyonel) Java derleyici; Kotlin sonrası çalışır -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -132,4 +142,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
