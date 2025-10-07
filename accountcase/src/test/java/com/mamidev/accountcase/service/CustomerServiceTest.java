@@ -1,6 +1,8 @@
 package com.mamidev.accountcase.service;
 
+import com.mamidev.accountcase.dto.CustomerDto;
 import com.mamidev.accountcase.dto.CustomerDtoConverter;
+import com.mamidev.accountcase.exception.CustomerNotFoundException;
 import com.mamidev.accountcase.model.Customer;
 import com.mamidev.accountcase.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,5 +53,50 @@ class CustomerServiceTest {
         assertEquals(customer, result);
         verify(customerRepository).findById(id);
         verifyNoMoreInteractions(customerRepository);
+    }
+
+    @Test
+    public void testFindByCustomerId_whenCustomerIdDoesNotExist_shouldThrowCustomerNotFoundException(){
+        UUID id = UUID.randomUUID();
+        Mockito.when(customerRepository.findById((id))).thenReturn(Optional.empty());
+        assertThrows(CustomerNotFoundException.class,() -> service.findCustomerById(id));
+    }
+
+    @Test
+    void testgetCustomerById_whenCustomerIdExists() {
+        UUID id = UUID.randomUUID();
+
+        // Not: Entity constructor’ın senin projendeki imzasına göre uyarlayabilirsin
+        Customer customer = new Customer(
+                id,
+                "name",
+                "surname",
+                Set.of()
+        );
+
+        CustomerDto customerDto =  new CustomerDto(
+                id,
+                "name",
+                "surname",
+                Set.of()
+        );
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+        when(converter.convertToCustomerDto(customer)).thenReturn(customerDto);
+
+        // Act
+        CustomerDto result = service.getCustomerById(id);
+
+        // Assert
+        assertEquals(result, customerDto);
+        verify(customerRepository).findById(id);
+        verifyNoMoreInteractions(customerRepository);
+    }
+    @Test
+    public void testGetByCustomerId_whenCustomerIdDoesNotExist_shouldThrowCustomerNotFoundException(){
+        UUID id = UUID.randomUUID();
+        Mockito.when(customerRepository.findById((id))).thenReturn(Optional.empty());
+        assertThrows(CustomerNotFoundException.class,() -> service.getCustomerById(id));
+        Mockito.verifyNoInteractions(converter);
     }
 }
