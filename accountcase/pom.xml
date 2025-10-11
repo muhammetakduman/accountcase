@@ -48,8 +48,6 @@
 			<artifactId>kotlin-reflect</artifactId>
 			<version>${kotlin.version}</version>
 		</dependency>
-
-		<!-- Jackson Kotlin (JSON serileştirme) -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-kotlin</artifactId>
@@ -72,69 +70,77 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- test j5  -->
-
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>5.11.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!--validation-->
-
-
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!-- Spring Boot -->
+			<!-- Spring Boot repackage -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<!-- Kotlin compiler: all-open + no-arg (+ spring) -->
+			<!-- Kotlin compiler: spring + all-open + no-arg -->
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
 				<version>${kotlin.version}</version>
+
+				<!-- compiler plugin JAR'ları -->
+				<dependencies>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-allopen</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-noarg</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+				</dependencies>
+
 				<executions>
 					<execution>
-						<id>compile</id>
+						<id>kotlin-compile</id>
 						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
+						<goals><goal>compile</goal></goals>
 						<configuration>
 							<jvmTarget>${java.version}</jvmTarget>
 							<javaParameters>true</javaParameters>
 							<compilerPlugins>
-								<!-- Spring anotasyonlarını open yapar -->
 								<plugin>spring</plugin>
-								<!-- JPA için final kaldırma -->
 								<plugin>all-open</plugin>
-								<!-- JPA entity'lerine no-arg ctor üretir -->
 								<plugin>no-arg</plugin>
 							</compilerPlugins>
 							<pluginOptions>
-								<!-- JPA anotasyonları için all-open -->
+								<!-- Jakarta JPA -->
 								<option>all-open:annotation=jakarta.persistence.Entity</option>
 								<option>all-open:annotation=jakarta.persistence.MappedSuperclass</option>
 								<option>all-open:annotation=jakarta.persistence.Embeddable</option>
-								<!-- no-arg gerekli anotasyonlar -->
 								<option>no-arg:annotation=jakarta.persistence.Entity</option>
 								<option>no-arg:annotation=jakarta.persistence.MappedSuperclass</option>
 								<option>no-arg:annotation=jakarta.persistence.Embeddable</option>
 							</pluginOptions>
+
+							<!-- .kt dosyaları hâlâ src/main/java'da ise, onları da derle -->
+							<sourceDirs>
+								<sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+								<sourceDir>${project.basedir}/src/main/java</sourceDir>
+							</sourceDirs>
 						</configuration>
 					</execution>
 
 					<execution>
-						<id>test-compile</id>
+						<id>kotlin-test-compile</id>
 						<phase>test-compile</phase>
-						<goals>
-							<goal>test-compile</goal>
-						</goals>
+						<goals><goal>test-compile</goal></goals>
 						<configuration>
 							<jvmTarget>${java.version}</jvmTarget>
 						</configuration>
@@ -142,10 +148,11 @@
 				</executions>
 			</plugin>
 
-			<!-- (opsiyonel) Java derleyici; Kotlin sonrası çalışır -->
+			<!-- Java compiler (21) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.0</version>
 				<configuration>
 					<release>${java.version}</release>
 					<parameters>true</parameters>
@@ -153,5 +160,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
