@@ -4,6 +4,9 @@ Bu proje, Kotlin dilinin sağladığı type-safe özelliklerini Spring Boot alty
 Amacı, modern Spring mimarisiyle birlikte Kotlin’in null-safety, data class ve concise syntax avantajlarını göstermek; aynı zamanda katmanlı bir yapıyı ve test odaklı yaklaşımı örneklemektir.
 
 <-----------Neler yapıldı ----------->
+
+-----------------------------------------------------------------------------------------------------------------------
+
 Projede üç ana domain entity bulunuyor:
 
 Account → Hesap bilgisini ve bakiyeyi temsil eder.
@@ -27,6 +30,8 @@ ModelMapper veya MapStruct gibi harici kütüphaneler yerine, kendi converter s�
 Böylece dönüşümler kontrol edilebilir, sade ve Kotlin’in extension function avantajlarını kullanan bir yapıya dönüştü.
 
 <------------TEST--------------->
+
+-----------------------------------------------------------------------------------------------------------------------
 Proje boyunca JUnit 5 ve Mockito kullanılarak integration ve unit testleri yazıldı.
 
 Servis katmanında mock nesneler ile iş mantıkları test edildi.
@@ -38,6 +43,10 @@ Testler; AccountService, TransactionService, ve CustomerService iş akışların
 Böylece her katmanın beklenen davranışı bağımsız olarak güvence altına alındı.
 
 <----------GEREKSİNİMLER----------->
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
 Java +17
 Maven
 H2
